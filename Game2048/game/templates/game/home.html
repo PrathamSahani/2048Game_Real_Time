@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: white;
+            max-width: 100%;
+        }
+
+        header img {
+            height: 100px;
+            margin-left: 200px;
+            margin-top: -13px;
+        }
+
+        header a {
+            color: rgb(4, 4, 47);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 100px;
+        }
+
+        header a:hover {
+            text-decoration: underline;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px 100px;
+            flex-grow: 1;
+            background-color: #f4f4f4;
+        }
+
+        .left-section {
+            width: 50%;
+            padding: 20px;
+            margin-top: -130px;
+        }
+
+        .left-section h1 {
+            font-size: 1.7rem;
+            margin-bottom: 10px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        .left-section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        .right-section {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .right-section img {
+            width: 75%;
+            border-radius: 20px;
+            max-width: 600px;
+            height: auto;
+            margin-top: -80px;
+        }
+        #pl{
+            padding: 10px 20px ;
+            border-radius: 5px;
+            border: 2px solid rgb(4, 4, 47);
+            text-decoration: none;
+            color: rgb(4, 4, 47);
+        }
+        #pl:hover{
+            transition: 0.5s all;
+            background-color: rgb(4, 4, 47);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="https://i.ibb.co/rZTk2Fg/logo-removebg-preview.png" alt=" Logo">
+        <div>
+            {% if user.is_authenticated %}
+
+            <nav>
+                <a href="{% url 'profile' %}">Profile</a> |
+                <a href="{% url 'dashboard' %}">User Dashboard</a> |
+                <a href="{% url 'leaderboard' %}">Leaderboard</a> |
+                <a href="{% url 'game_view' %}">Game</a> |
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+            {% else %}
+
+            <nav>
+                <a href="{% url 'login' %}">Login</a> |
+                <a href="{% url 'register' %}">Register</a> |
+                <a href="{% url 'leaderboard' %}">Leaderboard</a> |
+                <a href="{% url 'game_view' %}">Game</a>
+            </nav>
+            {% endif %}
+
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="left-section">
+            {% if user.is_authenticated %}
+            <h1>Welcome, {{ user.username }}!</h1>
+
+            {% else %}
+            <h1>2048 Game: Track, Play, Compete! 🎮🚀</h1>
+
+            {% endif %}
+            <p>This is a 2048 Game 🎮! Logged-in users can track progress 📈, while guests can enjoy playing
+                without logging in. Compete on the leaderboard 🏆—let's dive in and start playing! 🚀
+                <br> <br>
+                <a id="pl" href="{% url 'game_view' %}">Let’s start</a>
+            </p>
+        </div>
+        <div class="right-section">
+            <img src="https://i.ibb.co/3spJwbv/iop-removebg-preview.png" alt="Weather Image">
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        header img {
+            height: 70px;
+            margin-left: 200px;
+
+        }
+
+        header nav a {
+            color:  rgb(4, 4, 47);
+            text-decoration: none;
+            font-weight: bold;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 1.2rem;
+            margin-right: 130px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 100px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: rgb(4, 4, 47);;
+            color: white;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        table th {
+            background-color: rgb(4, 4, 47);;
+            color: white;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+      
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="https://i.ibb.co/rZTk2Fg/logo-removebg-preview.png" alt="Logo">
+        {% if user.is_authenticated %}
+
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'profile' %}">Profile</a>
+        </nav>
+        {% else %}
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+        </nav>
+        {% endif %}
+
+    </header>
+
+    <div class="container">
+        <h1>Leaderboard</h1>
+        <form method="GET" action="{% url 'leaderboard' %}">
+            <input type="text" name="search" placeholder="Search Username" value="{{ search_query }}">
+            <select name="sort" onchange="this.form.submit()">
+                <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Best Score: High to Low</option>
+                <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Best Score: Low to High</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Best Score</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in leaderboard_data %}
+                <tr>
+                    <td>{{ entry.rank }}</td>
+                    <td>{{ entry.username }}</td>
+                    <td>{{ entry.best_score }}</td>
+                    <td>{{ entry.timestamp }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

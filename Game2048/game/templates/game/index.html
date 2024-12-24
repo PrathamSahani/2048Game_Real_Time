@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 Game</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+           
+           
+        }
+
+        header img {
+            height: 80px;
+            margin-left: 200px;
+        }
+
+        header nav a {
+            color: rgb(4, 4, 47);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 120px;
+        }
+
+        header nav a:hover {
+            text-decoration: underline;
+        }
+
+        h1, h3 {
+            color: #333;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        td {
+            width: 80px;
+            height: 80px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+
+        .tile-0 {
+            background-color: #ccc;
+            color: #776e65;
+        }
+
+        .tile-2 {
+            background-color: #eee4da;
+            color: #776e65;
+        }
+
+        .tile-4 {
+            background-color: #ede0c8;
+            color: #776e65;
+        }
+
+        .tile-8 {
+            background-color: #f2b179;
+            color: #f9f6f2;
+        }
+
+        .tile-16 {
+            background-color: #f59563;
+            color: #f9f6f2;
+        }
+
+        .tile-32 {
+            background-color: #f67c5f;
+            color: #f9f6f2;
+        }
+
+        .tile-64 {
+            background-color: #f65e3b;
+            color: #f9f6f2;
+        }
+
+        .tile-128 {
+            background-color: #edcf72;
+            color: #f9f6f2;
+        }
+
+        .tile-256 {
+            background-color: #edcc61;
+            color: #f9f6f2;
+        }
+
+        .tile-512 {
+            background-color: #edc850;
+            color: #f9f6f2;
+        }
+
+        .tile-1024 {
+            background-color: #edc53f;
+            color: #f9f6f2;
+        }
+
+        .tile-2048 {
+            background-color: #edc22e;
+            color: #f9f6f2;
+        }
+
+
+        button {
+            background-color: rgb(4, 4, 47);
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: rgb(12, 12, 63);
+        }
+
+   
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        #bot{
+            background-color: rgb(16, 82, 16);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-weight: bold;
+        }
+        #ex{
+            text-decoration: none;
+        }
+        #ex:hover{
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="https://i.ibb.co/rZTk2Fg/logo-removebg-preview.png" alt="Logo">
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </nav>
+    </header>
+
+    <h1>2048 Game</h1>
+    <h3>Score: {{ score }}</h3>
+    <h3>Best Score: {{ best_score }}</h3>
+
+    <table>
+        {% for row in board %}
+            <tr>
+                {% for cell in row %}
+                    <td class="tile-{{ cell }}">{{ cell }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <button name="move" value="top">↑</button>
+            <button name="move" value="left">←</button>
+            <button name="move" value="bottom">↓</button>
+            <button name="move" value="right">→</button>
+        </form>
+    </div>
+    <div style="margin-top: 20px;">
+        <form method="post">
+            {% csrf_token %}
+            <button id="bot" name="restart" value="restart">Restart Game</button>
+        </form>
+    </div>
+
+    {% if message == 'Game Over!' %}
+    <div class="modal" style="display: block;">
+        <div class="modal-content">
+            <h2>Game Over!😞</h2>
+            <form method="post">
+                {% csrf_token %}
+                <button name="restart" value="restart">Restart Game</button> <br>
+                <a id="ex" style="color: rgb(14, 58, 14);font-family: Verdana, Geneva, Tahoma, sans-serif;
+            " href="{% url 'home' %}">Back to home</a>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    {% if message == 'You Win!' %}
+    <div class="modal" style="display: block;">
+        <div class="modal-content">
+            <h2>Congratulations! You Win!🥳</h2>
+            <form method="post">
+                {% csrf_token %}
+                <button name="continue" value="continue">Continue</button>
+                <button name="restart" value="restart">Restart Game</button>
+                
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</body>
+
+</html>
