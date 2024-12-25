@@ -38,9 +38,9 @@ pip install django
 ```
 
 ### 4️⃣ Navigate to the Project Directory
-Change to the `2048Game` directory where the `manage.py` file is located:
+Change to the `Game2048` directory where the `manage.py` file is located:
 ```bash
-cd 2048Game
+cd Game2048
 ```
 
 ### 5️⃣ Migrate the Database
